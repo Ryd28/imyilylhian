@@ -1,0 +1,2021 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Moonlight Bouquet</title>
+<link rel="shortcut icon" href="moon.jpg" type="image/x-icon">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+/* 🌅 PAGE FADE-IN */
+body {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: pageFadeIn 1.6s ease-out forwards;
+}
+@keyframes pageFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+#spaceship{
+  position: absolute;
+  top: 80%;
+  left: -150px;
+  width: 400px; /* adjust size */
+  height: auto;
+  z-index: 500;
+  pointer-events: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 12px rgba(0,255,255,0.7));
+}
+/* Fly animation */
+@keyframes flyAcross {
+  0%{
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+  50%{
+    transform: translateX(50vw) translateY(-30px);
+  }
+  100%{
+    transform: translateX(120vw) translateY(10px);
+    opacity: 0;
+  }
+}
+#scarecrow-img {
+    position: fixed;
+    bottom: 10px; /* small margin from bottom */
+    right: -40px; /* small margin from right */
+    width: 300px; /* adjust size as needed */
+    height: 320px; /* maintain aspect ratio */
+    z-index: 1000; /* ensure it appears above other elements if necessary */
+    cursor: pointer; /* Added: indicate clickable */
+    transition: transform 0.3s ease; /* Smooth shake transition */
+  }
+  #scarecrow-img.shake {
+    animation: shake 0.5s; /* Added: shake on click */
+}
+@keyframes shake { /* Added: fun shake animation */
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+/* 👁️ SCARECROW EYE WRAPPER */
+#scarecrow-eye-wrap {
+    position: fixed;
+    bottom: 60px; /* Aligned roughly with head */
+    right: -30px;
+    width: 300px;
+    height: 300px; /* Give it height so eyes position correctly */
+    z-index: 2000;
+    pointer-events: none; /* Let clicks pass through to the image */
+}
+/* GLOWING EYES */
+body.vampire-mode #scarecrow-eye-wrap::before,
+body.vampire-mode #scarecrow-eye-wrap::after {
+    content: "";
+    position: absolute;
+    top: 38%; /* Adjust based on where the head is */
+    width: 14px;
+    height: 14px;
+    background: red;
+    border-radius: 50%;
+    box-shadow:
+        0 0 8px rgba(255,0,0,0.9),
+        0 0 16px rgba(255,0,0,0.8),
+        0 0 28px rgba(255,0,0,0.7);
+    animation: eyePulse 1.2s infinite alternate;
+   
+    /* CRITICAL FIX: Z-Index higher than the image (1000) */
+    z-index: 2500;
+}
+/* Left eye */
+body.vampire-mode #scarecrow-eye-wrap::before {
+    left: 42%;
+}
+/* Right eye */
+body.vampire-mode #scarecrow-eye-wrap::after {
+    left: 52%;
+}
+@keyframes eyePulse {
+    from { transform: scale(0.9); opacity: 0.7; }
+    to { transform: scale(1.25); opacity: 1; }
+}
+/* Vampire mode: red smoke for coffee */
+body.vampire-mode .smoke {
+  background: rgba(255, 0, 0, 0.4);
+}
+/* 🌱 FLOWER GROWTH (BUD → BLOOM) */
+.flower .petals {
+  transform: scale(0.2) rotate(-20deg);
+  animation: bloom 10s ease-out forwards;
+}
+@keyframes bloom {
+  to { transform: scale(1) rotate(0deg); }
+}
+/* 📱 MOBILE */
+@media(max-width:768px){
+  .controls{ transform:scale(0.85); }
+  .moon{ width:100px;height:100px; }
+}
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* SKY */
+body {
+  height: 100vh;
+  background: linear-gradient(to top, #0b1026, #1a245c, #2f3fa4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+/* MOON */
+.moon {
+  position: absolute;
+  top: 60px;
+  right: 100px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle at 30% 30%, #fff, #ddd);
+  border-radius: 50%;
+  box-shadow: 0 0 50px rgba(255,255,255,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+/* MOON CRATER TEXT */
+.crater-text {
+  font-size: 0.7rem;
+  color: rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 5px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  pointer-events: none;
+}
+/* STARS */
+.star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 2s infinite alternate;
+}
+@keyframes twinkle {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+/* WIND EFFECT */
+.wind-streak {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+  pointer-events: none;
+  animation: windPass 4s linear infinite;
+}
+@keyframes windPass {
+  0% { transform: translateX(-100vw); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(100vw); opacity: 0; }
+}
+/* BOUQUET & SWAY */
+.bouquet {
+  position: relative;
+  width: 300px;
+  height: 420px;
+  margin-bottom: 40px;
+  animation: sway 5s ease-in-out infinite;
+  transform-origin: bottom center;
+  z-index: 0;
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
+/* FLOWER */
+.flower {
+  position: absolute;
+  bottom: 120px;
+}
+.petals {
+  position: relative;
+  width: 70px;
+  height: 70px;
+}
+.petal {
+  position: absolute;
+  width: 35px;
+  height: 50px;
+  background: radial-gradient(circle, #ffb6c1, #ff5f9e);
+  border-radius: 50%;
+}
+.petal:nth-child(1) { transform: rotate(0deg) translateY(-25px); }
+.petal:nth-child(2) { transform: rotate(60deg) translateY(-25px); }
+.petal:nth-child(3) { transform: rotate(120deg) translateY(-25px); }
+.petal:nth-child(4) { transform: rotate(180deg) translateY(-25px); }
+.petal:nth-child(5) { transform: rotate(240deg) translateY(-25px); }
+.petal:nth-child(6) { transform: rotate(300deg) translateY(-25px); }
+.center {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  width: 25px;
+  height: 25px;
+  background: gold;
+  border-radius: 50%;
+  box-shadow: 0 0 10px gold;
+}
+/* STEM */
+.stem {
+  width: 6px;
+  height: 120px;
+  background: linear-gradient(to bottom, #2ecc71, #145a32);
+  margin: auto;
+  border-radius: 5px;
+}
+/* WRAPPER */
+.wrap {
+  position: absolute;
+  bottom: 0;
+  width: 260px;
+  height: 160px;
+  background: linear-gradient(to top right, #995429, #f5cba7);
+  clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+}
+/* POSITIONS */
+.f1 { left: 40px; transform: scale(1.1); }
+.f2 { left: 115px; bottom: 140px; }
+.f3 { left: 190px; transform: scale(0.95); }
+/* GROUND */
+.ground {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background: #1f0b0a;
+}
+/* PICNIC FEATURE */
+.picnic-area {
+  position: absolute;
+  bottom: 10px;
+  right: 15%;
+  width: 200px;
+  height: 100px;
+  z-index: 5;
+}
+.book {
+  position: absolute;
+  bottom: 40px;
+  left: 30px;
+  width: 40px;
+  height: 10px;
+  background: #3498db;
+  border-left: 5px solid #2980b9;
+  border-radius: 2px;
+  transform: rotate(-10deg);
+}
+.coffee-cup {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  width: 25px;
+  height: 30px;
+  background: #fdfdfd;
+  border-radius: 0 0 10px 10px;
+}
+.coffee-cup::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: 5px;
+    width: 10px;
+    height: 15px;
+    border: 3px solid #fdfdfd;
+    border-radius: 50%;
+}
+.smoke-container {
+  position: absolute;
+  top: -30px;
+  left: 5px;
+}
+.smoke {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 50%;
+  filter: blur(2px);
+  animation: riseSmoke 2s infinite;
+}
+@keyframes riseSmoke {
+  0% { transform: translateY(0) scale(1); opacity: 0.5; }
+  100% { transform: translateY(-40px) scale(2); opacity: 0; }
+}
+/* JELLYFISH */
+.jellyfish {
+  position: absolute;
+  width: 50px;
+  height: 38px;
+  background: radial-gradient(circle at 50% 30%, #f3d9ff, #b388ff 70%);
+  border-radius: 50% 50% 35% 35%;
+  box-shadow: 0 0 20px rgba(180,120,255,0.6);
+  filter: blur(0.2px);
+  z-index: 2;
+  animation: jellyFloat 12s ease-in-out forwards;
+}
+.jellyfish::before,
+.jellyfish::after {
+  content: '';
+  position: absolute;
+  bottom: -22px;
+  width: 2px;
+  height: 26px;
+  background: rgba(200,150,255,0.6);
+  border-radius: 2px;
+  animation: tentacle 2s ease-in-out infinite;
+}
+.jellyfish::before { left: 16px; }
+.jellyfish::after { right: 16px; animation-delay: .6s; }
+@keyframes tentacle {
+  0%,100% { transform: rotate(3deg); }
+  50% { transform: rotate(-6deg); }
+}
+@keyframes jellyFloat {
+  0% { transform: translateY(0) scale(0.9); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-220px) scale(1.05); opacity: 0; }
+}
+/* VALENTINE MESSAGE */
+.valentine-message{ position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 2500; background: linear-gradient(90deg,#ff9ac9,#ffddf0); color:#45002b; padding:10px 18px; border-radius:999px; font-weight:700; box-shadow: 0 6px 24px rgba(0,0,0,.35); display:flex; gap:10px; align-items:center; font-size:1rem; }
+.valentine-message .heart{ color:#e91e63; font-size:1.1rem; animation: pulse 1200ms infinite ease-in-out; }
+@keyframes pulse{ 0%{ transform: scale(.95) }50%{ transform: scale(1.12) }100%{ transform: scale(.95) } }
+/* CONTROLS */
+.ctrl-btn{ background: rgba(255,255,255,0.06); color: #fff; border: 1px solid rgba(255,255,255,0.12); padding: .45rem .6rem; border-radius:8px; margin-left:.4rem; cursor:pointer; backdrop-filter: blur(6px); font-weight:600; }
+.ctrl-btn:hover{ transform: translateY(-3px); box-shadow: 0 10px 26px rgba(0,0,0,0.28); }
+/* DYNAMIC PARTICLES */
+.p-falling{ position:absolute; width:14px; height:18px; background: radial-gradient(circle at 30% 30%, #ffb6c1, #ff5f9e); border-radius:50% 50% 50% 50%; pointer-events:none; z-index:1800; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25)); }
+.kiss{ position:absolute; pointer-events:none; z-index:1800; font-size:18px; color:#ff6b81; text-shadow:0 3px 8px rgba(0,0,0,0.4); }
+.confetti{ position:absolute; width:8px; height:12px; border-radius:2px; pointer-events:none; z-index:1800; }
+/* SKY TEXT CSS */
+.sky-text{
+  position: absolute;
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.9);
+  font-weight: 600;
+  text-shadow: 0 4px 18px rgba(0,0,0,0.6);
+  animation: fadeFloat 5s ease-in-out forwards;
+  pointer-events: none;
+  z-index: 1500;
+}
+@keyframes fadeFloat{
+  0%{ opacity:0; transform: translateY(10px); }
+  20%{ opacity:1; }
+  80%{ opacity:1; }
+  100%{ opacity:0; transform: translateY(-20px); }
+}
+/* TIP FEATURE CSS */
+#tipContainer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3000;
+  text-align: center;
+  width: 90%;
+  max-width: 600px;
+}
+.tip-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: none;
+  animation: slideUp 0.5s ease-out;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.tip-trigger {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.3s;
+}
+.tip-trigger:hover { background: rgba(255, 255, 255, 0.4); }
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+/* COUNTDOWN BOX CSS */
+.countdown-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  font-size: 0.85rem;
+  display: none;
+  z-index: 2500;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  animation: slideInRight 0.6s ease-out;
+}
+/* CLOSE TIMER BUTTON */
+.close-timer {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+}
+.close-timer:hover { color: #ff9ac9; }
+.countdown-box span { display: block; margin-bottom: 4px; opacity: 0.8; font-size: 0.75rem; text-transform:uppercase; letter-spacing: 1px;}
+.countdown-box #timerDisplay { font-weight: 700; font-size: 1.1rem; color: #ff9ac9; font-family: monospace; }
+@keyframes slideInRight {
+  from { transform: translateX(50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+/* PARALLAX */
+.bouquet{ transition: transform .18s ease; transform-origin: 50% 60%; }
+/* STARFIELD: sizes + twinkle */
+#starfield{ position:absolute; inset:0; pointer-events:none; z-index:40; }
+.star{ position:absolute; border-radius:50%; background: #fff; opacity:.8; transform: translateZ(0); }
+.star.small{ width:2px; height:2px; opacity:.6; }
+.star.medium{ width:3px; height:3px; opacity:.8; }
+.star.big{ width:4px; height:4px; opacity:1; box-shadow: 0 0 6px rgba(255,255,255,0.6); }
+.star{ animation: twinkle var(--twink) infinite alternate; }
+/* VAMPIRE */
+.vampire{ position:absolute; top: 18px; right: 190px; width:86px; height:110px; z-index:120; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.vampire svg{ width:100%; height:auto; display:block; }
+.vampire .cape{ transform-origin: 60px 40px; }
+.vampire{ transition: transform .3s ease, left .8s ease, top .8s ease; }
+.vampire:hover{ transform: translateY(-4px) scale(1.03); }
+.vampire .eye{ transition: fill .12s linear; }
+.vampire.flap .cape{ animation: flap 420ms ease-in-out 3; }
+.vampire.flap .eye{ fill:#ff5f9e; }
+.vampire.perch{ transform: translateY(-6px) scale(0.98); }
+@keyframes flap{ 0%{ transform: rotate(0deg) } 50%{ transform: rotate(12deg) } 100%{ transform: rotate(0deg) } }
+/* BAT (SVG) */
+.bat{ position:absolute; width:28px; height:18px; pointer-events:none; z-index:2000; transform-origin:center; }
+.bat svg{ width:100%; height:100%; display:block; }
+.bat.fly{ animation: flyAway 1000ms cubic-bezier(.2,.8,.2,1) forwards; }
+@keyframes flyAway{ 0%{ opacity:1; transform: translate(0,0) scale(1) rotate(0deg) } 100%{ opacity:0; transform: translate(420px,-280px) scale(.6) rotate(360deg) } }
+/* VAMPIRE MODE: sky tint, moon glow, star mood */
+body.vampire-mode{ background: linear-gradient(to top, #030114, #120427, #29164b) !important; }
+body.vampire-mode .moon{ box-shadow: 0 0 70px rgba(200,120,255,0.9), 0 0 16px rgba(255,255,255,0.1); filter: hue-rotate(20deg); }
+body.vampire-mode .star{ opacity: .5; filter: drop-shadow(0 0 4px rgba(120,80,200,0.6)); }
+.ctrl-btn.active{ background: linear-gradient(90deg,#6b1d3a,#3b0020); border-color: rgba(255,255,255,0.06); color: #ffd8ea; box-shadow: 0 8px 18px rgba(107,29,58,0.18) }
+@media (prefers-reduced-motion: reduce){ .vampire .cape, .vampire .eye, .bat{ animation:none !important; transition:none !important; } }
+/* 🎶 AUDIO TOGGLE BUTTON */
+#audioToggle{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  z-index:3000;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(8px);
+  color:#fff;
+  border:none;
+  padding:10px 16px;
+  border-radius:999px;
+  cursor:pointer;
+  font-weight:600;
+}
+#audioToggle.active{
+  background:linear-gradient(90deg,#ff9ac9,#ff5f9e);
+  color:#2b0020;
+ 
+}
+/* 🎵 SONG SELECTOR STYLE */
+#songSelector{
+  position: fixed;
+  bottom: 70px;
+  left: 20px;
+  z-index: 3000;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+#songList{
+  background: transparent;
+  color: white;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+#songList option{
+  color: black;
+}
+/* 💌 SECRET MOON MESSAGE */
+.secret-moon-message{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(0,0,0,0.6);
+  color:#fff;
+  padding:20px 28px;
+  border-radius:18px;
+  font-size:1rem;
+  z-index:4000;
+  display:none;
+  text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,0.5);
+  animation: fadeIn 0.6s ease;
+}
+@keyframes fadeIn{
+  from{opacity:0; transform:translate(-50%,-40%);}
+  to{opacity:1; transform:translate(-50%,-50%);}
+}
+/* Vinyl Record Styles */
+#vinyl {
+  position: fixed;
+  bottom: 5px;
+  left: 160px;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, #333 10%, #222 15%, #333 20%, #222 25%, #333 30%, #222 35%, #333 40%, #000 45%);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  z-index: 10;
+  transform-origin: center;
+}
+#vinyl.rotating {
+  animation: rotateVinyl 10s linear infinite;
+}
+@keyframes rotateVinyl {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+/* Musical Notes Styles */
+.music-note {
+  position: absolute;
+  font-size: 1.2rem;
+  color: #ffd700;
+  text-shadow: 0 0 5px #ff5f9e;
+  pointer-events: none;
+  z-index: 15;
+  animation: floatNote 3s ease-out forwards;
+}
+@keyframes floatNote {
+  0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(-100px) rotate(45deg); }
+}
+.catgif{
+    position:fixed;
+    bottom:50px;
+    left:350px;
+    width:150px;
+}
+</style>
+</head>
+<body>
+
+
+  <img src="catt.gif" class="catgif">
+  
+
+<img id="targetImage" src="notebook.jpg" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); max-width:300px; z-index:9999; opacity:0; transition: opacity 1s ease;" />
+
+
+<audio id="sipSound" src="drink-swallow-272665.mp3" preload="auto"></audio>
+<div id="witchMessage"
+     style="position: absolute; display: none; background: rgba(255,255,255,0.9);
+            color: #45002b; padding: 12px 20px; border-radius: 15px;
+            font-weight: 600; font-size: 1rem; z-index: 4000; max-width: 200px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);">
+</div>
+  <!-- 🚀 SPACESHIP -->
+<img id="spaceship" src="plane-Picsart-BackgroundRemover.png" alt="Spaceship">
+  <div id="scarecrow-eye-wrap">
+  <img src="scarecrow-Picsart-BackgroundRemover.png" alt="Scarecrow" id="scarecrow-img" />
+</div>
+<div style="position: fixed; bottom: 10px; right: -40px; width: 300px; height: 320px; pointer-events: none; z-index: 1001;">
+  <img src="scareflower (1).png"
+       style="position: fixed;
+              bottom: 160px;
+              left:83%;
+              right: 50%;
+              width: 3%;
+              height: auto;">
+</div>
+<!-- 💌 SECRET MESSAGE -->
+<div class="secret-moon-message" id="moonSecret">
+  🌙<br><br>
+  This moon knows your name.<br>
+  And it glows a little brighter when you’re here.<br><br>
+  — Rhon
+ 
+</div>
+<audio id="bgAudio" loop>
+  <source src="Kung Nakikita Mo Lang.mp3" type="audio/mpeg">
+</audio>
+<button id="audioToggle">🎶 Play music</button>
+<!-- 🎵 SONG SELECTOR -->
+<div id="songSelector">
+  <select id="songList">
+    <option value="Kung Nakikita Mo Lang.mp3">Kung Nakikita Mo Lang</option>
+    <option value="Fade-Into-You.mp3">Fade Into You</option>
+    <option value="libo libong buwan.mp3">Libo libong buwan</option>
+    <option value="those eyes.mp3">Those Eyes</option>
+    <option value="Dito Sa’kin - Earl Agustin (Official Lyric Video) 4.mp3">To d pple who had u b4</option>
+    <option value="Lover, You Should've Come Over.mp3">rhon is yearning for u</option>
+    <option value="Westlife.mp3">Westlife (u nd ur papa's)</option>
+    <option value="If I Fell (Remastered 2009).mp3">IFTLWMTJHLDNGHNDS</option>  
+    <option value="My Love Mine All Mine.mp3">My Love Mine All Mine</option>
+    <option value="Madaling Araw.mp3">Madaling Araw...?</option>
+    <option value="tulog na, mahal ko.mp3">play this if ur sleepy</option>
+    <option value="Your Universe.mp3">Your Universe</option>
+    <option value="infrunami.mp3">gytwiwytoinibyp🙏🏻😫</option>
+    <option value="Tothapi - Panata.mp3">Panata</option>
+  </select>
+</div>
+  <div class="valentine-message" aria-hidden="false">Happy Valentine's day Lhian Shane - Rhon <span class="heart">❤</span></div>
+  <div class="controls" aria-hidden="false" style="position:fixed; top:16px; right:18px; z-index:2000; display:flex; gap:.4rem; align-items:center;">
+    <button class="ctrl-btn" id="petalBtn" title="P — Release petals">Petals</button>
+    <button class="ctrl-btn" id="kissBtn" title="K — Blow a kiss">Blow a kiss</button>
+    <button class="ctrl-btn" id="confettiBtn" title="C — Confetti">Confetti</button>
+    <button class="ctrl-btn" id="vampModeBtn" title="V — Vampire Mode">Vampire Mode</button>
+  </div>
+<div class="moon" id="moon">
+  <div class="crater-text" id="craterText">made by rhon</div>
+</div>
+<div id="starfield" aria-hidden="true"></div>
+<div id="vampire" class="vampire" role="button" tabindex="0" aria-label="Witch — click to flap and release particles"></div>
+<div class="picnic-area">
+    <div class="blanket"></div>
+    <div class="book"></div>
+    <div class="coffee-cup">
+        <div class="smoke-container">
+            <div class="smoke" style="animation-delay: 0s; left: 2px;"></div>
+            <div class="smoke" style="animation-delay: 0.5s; left: 8px;"></div>
+            <div class="smoke" style="animation-delay: 1.2s; left: 5px;"></div>
+        </div>
+    </div>
+    <!-- Vinyl Record in Picnic Area -->
+    <div id="vinyl"></div>
+</div>
+<div class="bouquet">
+  <div class="flower f1">
+    <div class="petals">
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="center"></div>
+    </div>
+    <div class="stem"></div>
+  </div>
+  <div class="flower f2">
+    <div class="petals">
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="center"></div>
+    </div>
+    <div class="stem"></div>
+  </div>
+  <div class="flower f3">
+    <div class="petals">
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="center"></div>
+    </div>
+    <div class="stem"></div>
+  </div>
+  <div class="wrap"></div>
+</div>
+<div class="ground"></div>
+<div id="tipContainer">
+  <button class="tip-trigger" id="tipTrigger">Click for a message ✨</button>
+  <div class="tip-box" id="tipBox">
+    <div id="tipContent"></div>
+  </div>
+</div>
+<div id="vdayCountdown" class="countdown-box">
+  <button class="close-timer" id="closeTimer">×</button>
+  <span>Next Valentine's in:</span>
+  <div id="timerDisplay">Wait...</div>
+ 
+</div>
+<script>
+
+
+const songSelect = document.getElementById('songList');
+const targetImage = document.getElementById('targetImage');
+
+let showTimeout = null;
+let fadeTimeout = null;
+
+songSelect.addEventListener('change', () => {
+  if (songSelect.value === "Lover, You Should've Come Over.mp3") {
+    // Clear previous timeouts
+    if (showTimeout) clearTimeout(showTimeout);
+    if (fadeTimeout) clearTimeout(fadeTimeout);
+    
+    // Start delay before showing the image
+    showTimeout = setTimeout(() => {
+      // Show the image
+      targetImage.style.display = 'block';
+      // Trigger fade-in
+      setTimeout(() => {
+        targetImage.style.opacity = 1;
+      }, 10);
+      
+      // Set timeout to fade out after 3 seconds
+      fadeTimeout = setTimeout(() => {
+        targetImage.style.opacity = 0;
+        // Hide after fade out
+        setTimeout(() => {
+          targetImage.style.display = 'none';
+        }, 1000); // transition duration
+      }, 5000); // 3 seconds delay before fade out
+    }, 7000); // 3 seconds delay before showing
+  } else {
+    // Clear timeouts when selection changes
+    if (showTimeout) clearTimeout(showTimeout);
+    if (fadeTimeout) clearTimeout(fadeTimeout);
+    // Fade out and hide immediately
+    targetImage.style.opacity = 0;
+    setTimeout(() => {
+      targetImage.style.display = 'none';
+    }, 1000);
+  }
+});
+
+  const sipAudio = document.getElementById('sipSound');
+const coffeeElement = document.querySelector('.coffee-cup');
+if (coffeeElement) {
+  coffeeElement.addEventListener('click', () => {
+    if (sipAudio) {
+      sipAudio.currentTime = 0; // restart the sound
+      sipAudio.play();
+    }
+    // optional: add a quick scale animation for visual feedback
+    coffeeElement.style.transition = 'transform 0.2s ease';
+    coffeeElement.style.transform = 'scale(1.2)';
+    setTimeout(() => {
+      coffeeElement.style.transform = 'scale(1)';
+    }, 200);
+  });
+}
+const witch = document.getElementById('vampire');
+const witchMessage = document.getElementById('witchMessage');
+const messages = [
+  "Lhian, ang cute cute mo",
+  "Lhian, ang ganda mo",
+  "Lhian, type na type ka nung gumawa sakin"
+];
+// Function to show message next to witch
+function showWitchMessage() {
+  // Pumili ng random message
+  const msg = messages[Math.floor(Math.random() * messages.length)];
+  witchMessage.textContent = msg;
+  // Kunin position ng witch
+  const rect = witch.getBoundingClientRect();
+  // I-posisyon ang message sa kanan ng witch (o sa kaliwa kung gusto)
+  witchMessage.style.top = (rect.top + window.scrollY - 10) + 'px'; // konting offset sa taas
+  witchMessage.style.left = (rect.right + 10) + 'px'; // 10px sa kanan
+  // Ipakita
+  witchMessage.style.display = 'block';
+  // Matagal bago mawala (5s)
+  setTimeout(() => { witchMessage.style.display = 'none'; }, 3000);
+}
+// Ipakita muna after 3s, saka every 30s
+setTimeout(showWitchMessage, 3000);
+setInterval(showWitchMessage, 30000);
+const spaceship = document.getElementById('spaceship');
+function sendSpaceship(){
+  // Kunin exact position ng moon
+  const moon = document.getElementById('moon');
+  const moonRect = moon.getBoundingClientRect();
+  // Center ng moon sa screen
+  const moonCenterY = moonRect.top + moonRect.height/2;
+  spaceship.style.top = (moonCenterY - spaceship.height/2) + 'px';
+  spaceship.style.left = '-150px';
+  spaceship.style.opacity = '1';
+  spaceship.animate([
+    { transform: 'translateX(0px)' },
+    { transform: `translateX(${window.innerWidth + 300}px)` }
+  ], {
+    duration: 6000,
+    easing: 'linear'
+  }).onfinish = () => {
+    spaceship.style.opacity = '0';
+  };
+}
+// Simula: 10s delay, saka every 2minutes
+setTimeout(sendSpaceship, 120000);
+setInterval(sendSpaceship, 120000);
+document.getElementById('vampModeBtn').addEventListener('click', () => {
+  document.body.classList.toggle('vampire-mode');
+});
+ 
+ 
+const scarecrow = document.getElementById('scarecrow-img');
+  if (scarecrow) {
+    scarecrow.addEventListener('click', () => {
+      scarecrow.classList.add('shake');
+      setTimeout(() => scarecrow.classList.remove('shake'), 500); // Remove shake after animation
+      const rect = scarecrow.getBoundingClientRect();
+      confettiBurst(60, rect); // Release confetti from scarecrow position
+    });
+  }
+const valentineMsg = document.querySelector('.valentine-message');
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+valentineMsg.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  offsetX = e.clientX - valentineMsg.offsetLeft;
+  offsetY = e.clientY - valentineMsg.offsetTop;
+  document.body.style.cursor = 'move';
+});
+document.addEventListener('mouseup', () => {
+  if (isDragging) {
+    isDragging = false;
+    document.body.style.cursor = 'default';
+  }
+});
+document.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    valentineMsg.style.position = 'fixed'; // ensure it's fixed
+    valentineMsg.style.left = (e.clientX - offsetX) + 'px';
+    valentineMsg.style.top = (e.clientY - offsetY) + 'px';
+  }
+});
+/* ================= ADDITIVE JS ONLY ================= */
+(function(){
+ 
+  /* 🌸 WIND → PETALS */
+  function applyWind(){
+    const strength = (Math.random() * 8 - 4).toFixed(2) + 'deg';
+    document.documentElement.style.setProperty('--wind-strength', strength);
+    document.body.classList.add('wind-active');
+    setTimeout(()=>document.body.classList.remove('wind-active'),2000);
+  }
+  setInterval(applyWind, 4000);
+  /* 🌙 MOON CLICK SECRET */
+  const moon = document.getElementById('moon');
+  const secret = document.getElementById('moonSecret');
+  moon.addEventListener('click', ()=>{
+    secret.style.display='block';
+    setTimeout(()=>secret.style.display='none',6000);
+  });
+  /* 🎶 AUDIO TOGGLE */
+  const audio = document.getElementById('bgAudio');
+  const btn = document.getElementById('audioToggle');
+  const vinyl = document.getElementById('vinyl');
+  let playing=false;
+  let noteInterval = null;
+  btn.addEventListener('click',()=>{
+    if(!playing){
+      audio.play();
+      btn.textContent='⏸ Pause music';
+      btn.classList.add('active');
+      vinyl.classList.add('rotating');
+      startProducingNotes();
+    }else{
+      audio.pause();
+      btn.textContent='🎶 Play music';
+      btn.classList.remove('active');
+      vinyl.classList.remove('rotating');
+      stopProducingNotes();
+    }
+    playing=!playing;
+  });
+  function startProducingNotes() {
+    if (noteInterval) return;
+    noteInterval = setInterval(spawnMusicNote, 1000); // Spawn a note every second
+  }
+  function stopProducingNotes() {
+    if (noteInterval) {
+      clearInterval(noteInterval);
+      noteInterval = null;
+    }
+  }
+  function spawnMusicNote() {
+    const rect = vinyl.getBoundingClientRect();
+    const note = document.createElement('div');
+    note.className = 'music-note';
+    note.textContent = Math.random() > 0.5 ? '♪' : '♫';
+    note.style.left = (rect.left + rect.width / 2 + (Math.random() - 0.5) * 20) + 'px';
+    note.style.top = (rect.top - 10) + 'px';
+    document.body.appendChild(note);
+    setTimeout(() => note.remove(), 3000);
+  }
+  /* 🎵 SONG SELECTOR LOGIC */
+const songList = document.getElementById('songList');
+songList.addEventListener('change', () => {
+  const wasPlaying = !audio.paused;
+  audio.src = songList.value;
+  audio.load();
+  if(wasPlaying){
+    audio.play();
+  }
+});
+})();
+</script>
+<script>
+(function(){
+  const bouquet = document.querySelector('.bouquet');
+ 
+  // --- SKY TEXT FEATURE ---
+  const skyMessages = [
+    "You don't know how much I've missed you",
+    "Hi Lhian Shane",
+    "Kamusta ka Lhian?",
+    "You're the cutest.",
+    "Thank you for being you.",
+    "This is a safe space for you.",
+    "You are so loved.",
+    "I must be the luckiest to know you.",
+    "I'll admit, you're really special.",
+    "Thinking of you always makes me smile.",
+    "Did you know? one notification from you brightens my day.",
+    "kailan ba kita ulit makikita?",
+    "kailan ko kaya ulit maririnig ang boses mo?",
+    "kailan kaya kita ulit makikita?",
+    "miss na miss na kita Lhian Shane",
+    "crush kita forever",
+    "wala eh ikaw lang talaga eh",
+    "sana palagi kang masaya",
+    "sana palagi kang ligtas",
+    "sana palagi kang healthy at malakas",
+    "sana lagi kang ngumingiti",
+    "sana di ka galit sa akin haha",
+    "sorry kung cringe nanaman",
+    "Happy Valentine's Day Lhian Shane! from: rhon",
+    "made by your true lover... Rhon",
+    "made with so much love, Rhon",
+    "alam mo naman sigurong miss kita, diba?",
+    "pwede ba mag apply bilang alipin mo?",
+    "nandito lang ako palagi para sa'yo",
+    "hindi mo rin ba ako miss? jk",
+    "kahit anong gawin ko, di kita makalimutan",
+    "sana makita ulit kita soon",
+    "sana kasama kita ngayon",
+    "kung bibigyan ako ng pagkakataon, pipiliin pa rin kita",
+    "you're the one that I want to be with :>>",
+    "salamat sa lahat Lhian Shane",
+    "salamat sa lemon square na binigay mo sakin",
+    "salamat sa lemon square na binigay mo",
+    "salamat sa lemon square na binigay mo sakin",
+    "gustong gusto kita kausapin",
+    "gustong gusto kita kausapin lagi",
+    "ba't ba baliw na baliw ako sayo?",
+    "ba't ba palagi kang nasa isip ko?",
+    "ba't ba palagi kitang iniisip?",
+    "ba't ba palagi kitang naiisip?",
+    "ba't ba palagi kang nasa puso ko?",
+    "ba't ba palagi kang nasa utak ko?",
+    "ba't ba palagi kang nasa nervous system ko?",
+    "can I soon call you love?",
+    "can I soon call you dear?",
+    "can I soon call you mine?",
+    "can I soon call you my baby?",
+    "can I soon call you sweetheart?",
+    "can I soon call you honey?",
+    "can I call you missy?",
+    "what or how do you prefer to be called?",
+    "sana palagi kang masaya Lhian Shane",
+    "sana palagi kang ligtas Lhian Shane",
+    "sana palagi kang healthy at malakas Lhian Shane",
+    "sana lagi kang ngumingiti Lhian Shane",
+    "you, you always.",
+    "I don't love you for something in return.",
+    "I don't plan on stopping on loving you.",
+    "I just love you, that's all.",
+    "WILL YOU BE MY VALENTINE?",
+    "WILL YOU BE MY VALENTINE?",
+    "WILL YOU BE MY VALENTINE?",
+    "WILL YOU BE MY VALENTINE?",
+    "habang buhay kitang mamahalin",
+    "itanong mo sa akin, sino aking mahal? sagot ko'y di magtatagal",
+    "ikaw lang ang aking mahal",
+    "ikaw lang ang aking iibigin",
+    "lagi kang kamahal mahal",
+    "lagi kitang mamahalin",
+    "I'm a competetitor when it comes to loving you",
+    "oh kay gandang mag alay sa'yo",
+    "sa hilaga, o sa timog o kanluran, ay aking isisigaw, ikaw ang aking mahal",
+    "ikaw lang ang tangi kong mamahalin",
+    "bakit ba di mo ako subukan?",
+    "may pag-asa pa ba ako sayo?",
+    "sana bigyan mo ako ng chance",
+    "sana bigyan mo ako ng pagkakataon",
+    "sana bigyan mo ako ng pagkakataon na mapasaya ka",
+    "sana bigyan mo ako ng pagkakataon na mahalin ka",
+    "may chance ba ako sa'yo?",
+    "may pag-asa pa ba ako sa'yo?",
+    "hindi ka kailanman magiging basta lang sa akin",
+    "di mo ba pansin? may crush ako sa'yo",
+    "do you have any idea how special you are to me?",
+    "you mean so much to me more than you'll ever know.",
+    "do you even know how much I regret not being with you?",
+    "I wish I could turn back time just to be with you.",
+    "if only I had the courage to tell you how I feel.",
+    "you are always on my mind, even when you're not around.",
+    "do you even know how beautiful you are?",
+    "I hope you'll see you the way I see you.",
+    "I think loving you is my favorite thing to do.",
+    "I think loving you is the easiest thing I've ever done.",
+    "I think loving you is worth every risk and every fear.",
+    "do you even realize how cute you are, Lhian Shane?",
+    "I like your smile",
+    "I like it when you laugh",
+    "I like it when you talk to me",
+    "I like it when you look at me",
+    "I like it when you text me",
+    "I'll be honest, I'll be vulnerable: I feel sad for a long period of time when you don't reply",
+    "I feel happy for a long period of time when you reply",
+    "I feel excited when I see your name on my phone",
+    "I feel nervous when I think about you",
+    "I feel butterflies when I talk to you",
+    "I feel sad when you ignore me, but I understand",
+    "I feel happy when you smile",
+    "I feel loved when you say kind words to me",
+    "I wonder what the future holds for us",
+     "I wonder what the future holds for us",
+      "I wonder what the future holds for us",
+    "I wonder if you think about me sometimes",
+    "I wonder if you think about me sometimes",
+    "I wonder if you think about me sometimes",
+    "I wonder if you think about me sometimes",
+    "I wonder if you think about me sometimes",
+    "I'm sorry if I don't look like james reid",
+    "I'm sorry if I don't look like enrique gil",
+    "I'm sorry if I don't look like luis manzano",
+    "I'm sorry if I don't look like piolo pascual",
+    "I beat james reid in loving you",
+    "I beat enrique gil in loving you",
+    "I'll beat everyone in terms of loving you",
+    "I beat piolo pascual in terms of loving you",
+       "I'll beat everyone in terms of loving you",
+          "I'll beat everyone in terms of loving you",
+             "I'll beat everyone in terms of loving you",
+             "hinding hindi ako magsasawang sabihin sayo kung gaano ka kaganda",
+             "ipagsisigawan ko sa buong mundo kung gaano ka kamahal mahal",
+             "hinding hindi ako magsasawang ipaalam sayo kung gaano kita kamahal",
+             "hinding hindi ako magsasawang ipaalam sayo kung gaano kita kaimportante sa akin",
+             "ipagsisigawan ko sa buong mundo ang taglay na kagandahan mo",
+             "para sa akin, karapat dapat ka mahalin ng buong mundo",
+             "para sa akin, wala namang kasing ganda mo",
+             "para sa akin, ikaw ang pinakamagandang nilalang sa mundo",
+             "para sa akin, ikaw ang pinakakarapat dapat mahalin",
+             "mahal kita, walang kapalit"
+   
+  ];
+  setInterval(()=>{
+    const text = document.createElement('div');
+    text.className = 'sky-text';
+    text.textContent = skyMessages[Math.floor(Math.random()*skyMessages.length)];
+    text.style.left = Math.random() * (window.innerWidth - 220) + 'px';
+    text.style.top = Math.random() * (window.innerHeight * 0.5) + 'px';
+    document.body.appendChild(text);
+    setTimeout(()=> text.remove(), 5000);
+  }, 5000);
+  // --- JELLYFISH FEATURE ---
+  function spawnJelly(count = 1) {
+  for(let i=0; i<count; i++){
+    const jelly = document.createElement('div');
+    jelly.className = 'jellyfish';
+    jelly.style.left = Math.random() * (window.innerWidth - 60) + 'px';
+    jelly.style.top = Math.random() * (window.innerHeight * 0.6) + 'px';
+    jelly.style.animationDuration = (10 + Math.random() * 6) + 's';
+    document.body.appendChild(jelly);
+    setTimeout(() => jelly.remove(), 16000);
+  }
+}
+function spawnRandomJelly() {
+  const count = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+  spawnJelly(count);
+}
+setInterval(spawnRandomJelly, 15000);
+spawnRandomJelly();
+  // --- WIND EFFECT GENERATOR ---
+  function createWind() {
+    const wind = document.createElement('div');
+    wind.className = 'wind-streak';
+    wind.style.top = Math.random() * 50 + '%';
+    wind.style.width = (100 + Math.random() * 200) + 'px';
+    wind.style.animationDuration = (3 + Math.random() * 3) + 's';
+    document.body.appendChild(wind);
+    setTimeout(() => wind.remove(), 6000);
+  }
+  setInterval(createWind, 2000);
+  // --- MOON CRATER TEXT EFFECT ---
+  const crater = document.getElementById('craterText');
+  setInterval(() => {
+    crater.style.opacity = '1';
+    setTimeout(() => { crater.style.opacity = '0'; }, 3000);
+  }, 30000);
+  function playChime(){
+    try{
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(440, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.18);
+      g.gain.setValueAtTime(0.001, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
+      o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 0.3);
+    }catch(e){ }
+  }
+  function releasePetals(count=30){
+    const rect = bouquet.getBoundingClientRect();
+    for(let i=0;i<count;i++){
+      const el = document.createElement('div');
+      el.className='p-falling';
+      const startX = rect.left + rect.width/2 + (Math.random()-0.5)*80;
+      const startY = rect.top + rect.height/3 + (Math.random()-0.5)*60;
+      el.style.left = startX + 'px'; el.style.top = startY + 'px';
+      document.body.appendChild(el);
+      const dx = (Math.random()-0.5) * 500;
+      const dy = window.innerHeight * (0.45 + Math.random()*0.55) * -1;
+      const rot = (Math.random()-0.5)*720;
+      const dur = 2200 + Math.random()*2400;
+      el.animate([
+        { transform: 'translate(0,0) rotate(0deg)', opacity:1 },
+        { transform: `translate(${dx}px, ${-window.innerHeight*0.6}px) rotate(${rot}deg)`, opacity:0 }
+      ], { duration: dur, easing: 'cubic-bezier(.2,.9,.2,1)' }).onfinish = ()=> el.remove();
+    }
+    playChime();
+  }
+  function blowKiss(count=8){
+    const rect = bouquet.getBoundingClientRect();
+    for(let i=0;i<count;i++){
+      const span = document.createElement('div');
+      span.className='kiss'; span.textContent = '💋';
+      const startX = rect.left + rect.width/2 + (Math.random()-0.5)*80;
+      const startY = rect.top + rect.height/2 + (Math.random()-0.5)*80;
+      span.style.left = startX + 'px'; span.style.top = startY + 'px';
+      document.body.appendChild(span);
+      const dx = (Math.random()-0.5)*140;
+      const dy = -200 - Math.random()*220;
+      const dur = 1200 + Math.random()*900;
+      span.animate([
+        { transform: 'translate(0,0) scale(0.9)', opacity:1 },
+        { transform: `translate(${dx}px, ${dy}px) scale(1.15)`, opacity:0 }
+      ], { duration: dur, easing: 'cubic-bezier(.2,.8,.2,1)' }).onfinish = ()=> span.remove();
+    }
+    playChime();
+  }
+  function confettiBurst(count=60){
+    const rect = bouquet.getBoundingClientRect();
+    const colors = ['#ff5f9e','#ffd166','#8ad98a','#8ad6ff','#d69cff'];
+    for(let i=0;i<count;i++){
+      const c = document.createElement('div'); c.className='confetti';
+      c.style.left = (rect.left + rect.width/2 + (Math.random()-0.5)*160) + 'px';
+      c.style.top = (rect.top + rect.height/2 + (Math.random()-0.5)*80) + 'px';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.width = (6 + Math.random()*8) + 'px'; c.style.height = (8 + Math.random()*10) + 'px';
+      document.body.appendChild(c);
+      const dx = (Math.random()-0.5)*600;
+      const dy = 600 + Math.random()*800;
+      const rot = (Math.random()-0.5)*1080;
+      c.animate([
+        { transform: 'translate(0,0) rotate(0deg)', opacity:1 },
+        { transform: `translate(${dx}px, ${dy}px) rotate(${rot}deg)`, opacity:0 }
+      ], { duration: 1000 + Math.random()*1400, easing: 'cubic-bezier(.2,.8,.2,1)' }).onfinish = ()=> c.remove();
+    }
+    playChime();
+  }
+  (function generateStars(count = 120){
+    const container = document.getElementById('starfield');
+    if(!container) return;
+    container.innerHTML = '';
+    const bouquetEl = document.querySelector('.bouquet');
+    const padding = 60;
+    function isInAvoidZones(x,y){
+      const rects = [];
+      if(bouquetEl) rects.push(bouquetEl.getBoundingClientRect());
+      return rects.some(r => x >= r.left - padding && x <= r.right + padding && y >= r.top - padding && y <= r.bottom + padding);
+    }
+    for(let i=0;i<count;i++){
+      let left, top, tries = 0;
+      do{
+        left = Math.floor(Math.random()*window.innerWidth);
+        top = Math.floor(Math.random()*(window.innerHeight*0.6));
+        tries++;
+      } while(isInAvoidZones(left, top) && tries < 40);
+      const s = document.createElement('div'); s.className = 'star';
+      const sizeRoll = Math.random();
+      s.classList.add(sizeRoll < 0.6 ? 'small' : (sizeRoll < 0.9 ? 'medium' : 'big'));
+      s.style.left = left + 'px';
+      s.style.top = top + 'px';
+      s.style.setProperty('--twink', Math.floor(700 + Math.random()*2500) + 'ms');
+      s.style.opacity = (0.3 + Math.random()*0.9).toFixed(2);
+      container.appendChild(s);
+    }
+    let resizeTimer;
+    window.addEventListener('resize', ()=>{ clearTimeout(resizeTimer); resizeTimer = setTimeout(()=> generateStars(count), 220); });
+  })();
+ 
+  const vampire = document.getElementById('vampire');
+  let vampAutoInterval = null;
+  let vampMoveTimer = null;
+  let vampModeOn = false;
+  let moveAnim = null;
+  let currentCharacter = 'witch';
+  function createBatSVG(){
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 16');
+    svg.innerHTML = `<path d="M2 8 C6 2, 10 2, 12 6 C14 2, 18 2, 22 8 C18 6, 16 10, 12 9 C8 10, 6 6,2 8 Z" fill="#0b0210"/><path d="M9 6 C9.5 7.2,10.5 7.2,11 6" fill="#2b0b16" opacity="0.6"/>`;
+    return svg;
+  }
+  function createWispSVG(){
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 16 16');
+    svg.innerHTML = `<circle cx="8" cy="8" r="5" fill="#ffd166" opacity="0.95" />`;
+    return svg;
+  }
+  function createOwlSVG(){
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 20');
+    svg.innerHTML = `<path d="M4 14 c2-6 16-6 18 0 c-4-2 -12-2 -18 0 z" fill="#e6c29a" /><circle cx="9" cy="9" r="2" fill="#2b0b16" /><circle cx="15" cy="9" r="2" fill="#2b0b16" />`;
+    return svg;
+  }
+  function spawnCreatures(count = 6, sourceRect){
+    if(!vampire) return;
+    const rect = sourceRect || vampire.getBoundingClientRect();
+    for(let i=0;i<count;i++){
+      const b = document.createElement('div');
+      b.className = 'bat';
+      let svg;
+      if(currentCharacter === 'vampire') svg = createBatSVG();
+      else if(currentCharacter === 'witch') svg = createWispSVG();
+      else svg = createOwlSVG();
+      b.appendChild(svg);
+      const x = rect.left + rect.width/2 + (Math.random()-0.5)*60;
+      const y = rect.top + (Math.random()-0.5)*30;
+      b.style.left = x + 'px'; b.style.top = y + 'px';
+      document.body.appendChild(b);
+      const dx = (Math.random()*1.6 - 0.8) * (220 + Math.random()*420);
+      const dy = currentCharacter === 'owl' ? (100 + Math.random()*40) : (-140 - Math.random()*260);
+      const rot = (Math.random()-0.5)*720;
+      b.animate([
+        { transform: 'translate(0,0) rotate(0deg)', opacity:1 },
+        { transform: `translate(${dx}px, ${dy}px) rotate(${rot}deg)`, opacity:0 }
+      ], { duration: 700 + Math.random()*1200, easing:'cubic-bezier(.2,.8,.2,1)' }).onfinish = ()=> b.remove();
+    }
+  }
+  function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2; }
+  function smoothMoveTo(targetX, targetY, duration=900){
+    if(!vampire) return;
+    if(moveAnim) cancelAnimationFrame(moveAnim);
+    const startRect = vampire.getBoundingClientRect();
+    const startX = startRect.left; const startY = startRect.top;
+    const dx = targetX - startX; const dy = targetY - startY;
+    const start = performance.now();
+    function frame(now){
+      const elapsed = Math.min(1, (now - start)/duration);
+      const t = easeInOutCubic(elapsed);
+      vampire.style.left = (startX + dx * t) + 'px';
+      vampire.style.top = (startY + dy * t) + 'px';
+      if(elapsed < 1){ moveAnim = requestAnimationFrame(frame); } else { moveAnim = null; }
+    }
+    moveAnim = requestAnimationFrame(frame);
+  }
+  function randomSkyPos(){
+    const padding = 40; const w = window.innerWidth; const h = window.innerHeight*0.3;
+    return { x: Math.floor(padding + Math.random()*(w - padding*2)), y: Math.floor(30 + Math.random()*h) };
+  }
+  function perchOnMoon(duration = 3600){
+    const moon = document.querySelector('.moon'); if(!moon) return;
+    const mr = moon.getBoundingClientRect();
+    const tx = Math.floor(mr.left + mr.width*0.35); const ty = Math.floor(mr.top + mr.height*0.12);
+    vampire.classList.add('perch'); smoothMoveTo(tx, ty, 1000);
+    if(vampModeOn) setTimeout(()=> spawnCreatures(6, vampire.getBoundingClientRect()), 600);
+    setTimeout(()=>{ vampire.classList.remove('perch'); }, duration);
+  }
+  function startVampireMovement(){
+    stopVampireMovement();
+    vampMoveTimer = setInterval(()=>{
+      if(Math.random() < 0.28){ perchOnMoon(); }
+      else{ const pos = randomSkyPos(); smoothMoveTo(pos.x, pos.y, 900 + Math.random()*900); }
+    }, 6000 + Math.random()*5000);
+  }
+  function stopVampireMovement(){ if(vampMoveTimer) { clearInterval(vampMoveTimer); vampMoveTimer = null; } }
+  function setVampireMode(on){
+    vampModeOn = !!on;
+    document.body.classList.toggle('vampire-mode', vampModeOn);
+    const btn = document.getElementById('vampModeBtn'); if(btn) btn.classList.toggle('active', vampModeOn);
+    if(vampModeOn){
+      setCharacter('vampire');
+      startVampireMovement();
+      vampAutoInterval = setInterval(()=>{ spawnCreatures(6, vampire.getBoundingClientRect()); }, 3800);
+    } else {
+      setCharacter('witch');
+      if(vampAutoInterval){ clearInterval(vampAutoInterval); vampAutoInterval = null; }
+      stopVampireMovement(); startVampireMovement();
+    }
+  }
+  function setCharacter(type){
+    currentCharacter = type; const el = vampire; if(!el) return;
+    const svgs = {
+      vampire: `<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path class="cape" d="M10 40 C18 8, 102 8, 110 40 C86 60, 86 90, 60 110 C34 90,34 60,10 40 Z" fill="#2b0b16" /><circle cx="60" cy="48" r="22" fill="#f2d6d6" /><ellipse class="eye" cx="50" cy="44" rx="3" ry="5" fill="#2b0b16" /><ellipse class="eye" cx="70" cy="44" rx="3" ry="5" fill="#2b0b16" /><path d="M52 60 q8 8 16 0" stroke="#6b2b2b" stroke-width="2" fill="none" stroke-linecap="round" /><path d="M60 60 L57 66 L60 66 Z" fill="#fff" /><path d="M64 60 L67 66 L64 66 Z" fill="#fff" /></svg>`,
+      witch: `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+  <!-- hat -->
+  <path d="M20 50 L80 18 L110 55 Z" fill="#2a1b3d"/>
+  <ellipse cx="70" cy="55" rx="42" ry="10" fill="#1d1229"/>
+  <!-- face -->
+  <circle cx="60" cy="85" r="24" fill="#e6f7f0"/>
+  <!-- eyes -->
+  <circle cx="52" cy="82" r="3" fill="#2b0b16"/>
+  <circle cx="68" cy="82" r="3" fill="#2b0b16"/>
+  <!-- blush -->
+  <circle cx="46" cy="88" r="4" fill="#ffb6c1" opacity=".5"/>
+  <circle cx="74" cy="88" r="4" fill="#ffb6c1" opacity=".5"/>
+  <!-- smile -->
+  <path d="M52 94 q8 6 16 0" stroke="#5a2a2a" stroke-width="2" fill="none"/>
+  <!-- cloak -->
+  <path d="M36 108 Q60 150 84 108 Z" fill="#3b225c"/>
+</svg>`,
+      owl: `<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="60" cy="64" rx="34" ry="28" fill="#c69c84" /><circle cx="48" cy="58" r="6" fill="#2b0b16" /><circle cx="72" cy="58" r="6" fill="#2b0b16" /><path d="M44 82 q16 8 32 0" stroke="#8a5a3a" stroke-width="3" fill="none" stroke-linecap="round" /></svg>`
+    };
+    el.innerHTML = svgs[type] || svgs['vampire'];
+    el.setAttribute('aria-label', `${type.charAt(0).toUpperCase() + type.slice(1)} — click to interact`);
+  }
+  // --- TIP LOGIC & COUNTDOWN ---
+  const tipTrigger = document.getElementById('tipTrigger');
+  const tipBox = document.getElementById('tipBox');
+  const tipContent = document.getElementById('tipContent');
+ 
+  const messages = [
+    "<strong>Tip:</strong> click the vase or press P to release petals — press K for a kiss, C for confetti, tapos chat mo ako sa fb ko Rhonron Villanueva for my kiss 😁",
+    "Every February 14 na dadaan, I'll add another flower/detail for you. I'll silently keep this site improving. You're probably gonna be more cuteing as time passes. HEHE","I love you more than all the stars in the background. ✨","triviaaa: alam mo ba na bats ang only mammal that can sustain flight? just like how you're the only one that can sustain my heart beating.","I like you hindi lang dahil valentines ngayon, I miss you hindi lang sa text, I love you hindi lang sa words, I'm attracted hindi lang dahil ang cute mo, kundi dahil ikaw talaga ang gusto ko. Does that makes sense?","At kung may isang bagay na hindi kailanman nagbago sa akin—iyon ay ang katotohanang totoo ang naramdaman ko sa'yo","Just tell me if kailangan mo ako, palagi akong nandito para sa'yo and only you.", "These three flowers represent I. Love. You. , I. Miss. You. , and I. admire. you. respectively. Just like how I feel for you every single day.","Nobody's perfect they say, but to me you're everything perfection could be.", "You can stay here as long as you want, I made this safe space just for you.","U da real Valentines."
+  ];
+ 
+  let currentMsgIndex = 0;
+  let countdownStarted = false;
+  function startVDayCountdown(){
+    if(countdownStarted) return;
+    countdownStarted = true;
+    const box = document.getElementById('vdayCountdown');
+    const disp = document.getElementById('timerDisplay');
+    const closeTimer = document.getElementById('closeTimer');
+    box.style.display = 'block';
+    closeTimer.onclick = () => { box.style.display = 'none'; };
+    function update(){
+      const now = new Date();
+      let year = now.getFullYear();
+      let nextVal = new Date(year, 1, 14);
+      if(now > nextVal) nextVal = new Date(year+1, 1, 14);
+     
+      const diff = nextVal - now;
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / 1000 / 60) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+     
+      disp.textContent = `${d}d ${h}h ${m}m ${s}s`;
+    }
+    update();
+    setInterval(update, 1000);
+  }
+  tipTrigger.addEventListener('click', () => {
+    tipTrigger.style.display = 'none';
+    tipContent.innerHTML = messages[currentMsgIndex];
+    tipBox.style.display = 'block';
+   
+    if(currentMsgIndex === 1) {
+      startVDayCountdown();
+    }
+   
+    currentMsgIndex = (currentMsgIndex + 1) % messages.length;
+  });
+  tipBox.addEventListener('click', () => {
+    tipBox.style.display = 'none';
+    setTimeout(() => {
+      tipTrigger.style.display = 'inline-block';
+      tipTrigger.textContent = "Next message ✨";
+    }, 3000);
+  });
+  if(vampire){
+    vampire.style.left = (window.innerWidth - 190) + 'px'; vampire.style.top = '18px';
+    setCharacter('witch');
+    startVampireMovement();
+    vampire.addEventListener('click', ()=> { vampire.classList.add('flap'); spawnCreatures(8, vampire.getBoundingClientRect()); setTimeout(()=> vampire.classList.remove('flap'), 1200); });
+  }
+  bouquet.addEventListener('mousemove', (ev)=>{
+    const r = bouquet.getBoundingClientRect();
+    const rx = (ev.clientY - (r.top + r.height/2)) / r.height;
+    const ry = (ev.clientX - (r.left + r.width/2)) / r.width;
+    const tiltX = -rx * 6; const tiltY = ry * 8;
+    bouquet.style.transform = `perspective(600px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  });
+  bouquet.addEventListener('mouseleave', ()=> bouquet.style.transform = '');
+  document.getElementById('petalBtn').addEventListener('click', ()=> releasePetals(28));
+  document.getElementById('kissBtn').addEventListener('click', ()=> blowKiss(10));
+  document.getElementById('confettiBtn').addEventListener('click', ()=> confettiBurst(80));
+  document.getElementById('vampModeBtn').addEventListener('click', ()=> setVampireMode(!vampModeOn));
+  bouquet.addEventListener('click', ()=> releasePetals(18));
+  bouquet.addEventListener('dblclick', ()=> confettiBurst(60));
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'p' || e.key === 'P') releasePetals(28);
+    if(e.key === 'k' || e.key === 'K') blowKiss(8);
+    if(e.key === 'c' || e.key === 'C') confettiBurst(60);
+    if(e.key === 'v' || e.key === 'V') setVampireMode(!vampModeOn);
+   
+  });
+})();
+</script>
+<script>
+/* ❤️ STAR HEART CONSTELLATION */
+(function () {
+  const starfield = document.getElementById("starfield");
+  const STAR_COUNT = 120;
+  const FORM_TIME = 5000; // 5s to form heart
+  const HOLD_TIME = 15000; // 15s stay heart
+  const RETURN_TIME = 5000; // 5s back
+  const INTERVAL = 60000; // every 60s
+  const stars = [];
+  const originals = [];
+  /* 🌌 Create stars */
+  for (let i = 0; i < STAR_COUNT; i++) {
+    const s = document.createElement("div");
+    s.className = "star small";
+    s.style.left = Math.random() * window.innerWidth + "px";
+    const TOP_AREA = window.innerHeight * 0.3; // top 30% only
+s.style.top = Math.random() * TOP_AREA + "px";
+    s.style.setProperty("--twink", (1 + Math.random() * 2) + "s");
+    starfield.appendChild(s);
+    stars.push(s);
+    originals.push({
+      x: parseFloat(s.style.left),
+      y: parseFloat(s.style.top),
+    });
+  }
+  /* ❤️ Generate heart points */
+  function heartPoints(count, scale = 11) {
+    const pts = [];
+    for (let i = 0; i < count; i++) {
+      const t = (Math.PI * 2 * i) / count;
+      const x =
+        16 * Math.pow(Math.sin(t), 3);
+      const y =
+        13 * Math.cos(t) -
+        5 * Math.cos(2 * t) -
+        2 * Math.cos(3 * t) -
+        Math.cos(4 * t);
+      pts.push({ x: x * scale, y: -y * scale });
+    }
+    return pts;
+  }
+  function center() {
+    return {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2.5,
+    };
+  }
+  /* 💖 Animate to heart */
+  function formHeart() {
+    const heart = heartPoints(stars.length);
+    const c = center();
+    stars.forEach((star, i) => {
+      const hx = c.x + heart[i].x;
+      const hy = c.y + heart[i].y;
+      star.animate(
+        [
+          { transform: "translate(0,0)" },
+          {
+            transform: `translate(${hx - originals[i].x}px, ${
+              hy - originals[i].y
+            }px)`,
+          },
+        ],
+        {
+          duration: FORM_TIME,
+          easing: "cubic-bezier(.25,.8,.25,1)",
+          fill: "forwards",
+        }
+      );
+    });
+    setTimeout(returnStars, HOLD_TIME);
+  }
+  /* 🌙 Return to original sky */
+  function returnStars() {
+    stars.forEach((star, i) => {
+      star.animate(
+        [
+          {
+            transform: getComputedStyle(star).transform,
+          },
+          { transform: "translate(0,0)" },
+        ],
+        {
+          duration: RETURN_TIME,
+          easing: "cubic-bezier(.25,.8,.25,1)",
+          fill: "forwards",
+        }
+      );
+    });
+  }
+  /* ⏱ Loop */
+  setInterval(formHeart, INTERVAL);
+})();
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Moonlight Bouquet - Memory Jar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+
+/* 📱 MOBILE */
+@media(max-width:768px){
+  .controls{ transform:scale(0.85); }
+  .moon{ width:100px;height:100px; }
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  height: 100vh;
+  background: linear-gradient(to top, #0b1026, #1a245c, #2f3fa4);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+/* --- THE JAR --- */
+#glassJar {
+  position: fixed;
+  bottom: 50px;
+  left: 100px;
+  /* Adjusted position as requested */
+  transform: translateX(192px);
+  width: 55px;
+  height: 75px;
+  cursor: pointer;
+  z-index: 20;
+  transition: transform 0.3s ease;
+  animation: gentleSway 4s ease-in-out infinite;
+}
+#glassJar:hover {
+  transform: translateX(192px) scale(1.1);
+}
+.jar {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(3px);
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-radius: 10px 10px 16px 16px;
+  position: relative;
+  box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.25),
+              0 0 14px rgba(255, 255, 255, 0.2);
+}
+.jar::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 10%;
+  width: 80%;
+  height: 8px;
+  background: #8b4513;
+  border-radius: 5px 5px 0 0;
+}
+.jar-preview-img {
+  position: absolute;
+  top: 22%;
+  left: 15%;
+  width: 70%;
+  height: 58%;
+  object-fit: cover;
+  opacity: 0.7;
+  border-radius: 2px;
+}
+/* --- NOTE UI OVERLAY --- */
+#noteUI {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+#noteUI.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.note-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  max-width: 320px;
+  width: 90%;
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.4s ease;
+}
+#noteUI.active .note-box {
+  transform: translateY(0);
+}
+.note-box p {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 15px;
+}
+.close-note {
+  background: #ff5f9e;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 15px;
+  transition: background 0.3s;
+}
+.close-note:hover { background: #e04e8a; }
+/* --- BIG TEXT OVERLAY --- */
+.message-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 6000;
+  pointer-events: none;
+  width: 100%;
+}
+.big-text {
+  display: block;
+  font-size: 2.8rem;
+  color: #fff;
+  text-shadow: 0 0 10px #ff5f9e, 0 0 30px #ff5f9e;
+  font-weight: bold;
+  opacity: 0;
+  margin: 15px 0;
+}
+/* --- ANIMATIONS --- */
+@keyframes fireflyRise {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(100px, -500px) scale(0.5); opacity: 0; }
+}
+@keyframes textPopup {
+  0% { transform: scale(0.5); opacity: 0; filter: blur(10px); }
+  15% { transform: scale(1); opacity: 1; filter: blur(0px); }
+  85% { transform: scale(1.05); opacity: 1; filter: blur(0px); }
+  100% { transform: scale(1.1); opacity: 0; filter: blur(10px); }
+}
+@keyframes gentleSway {
+  0%, 100% { transform: translateX(192px) rotate(-2deg); }
+  50% { transform: translateX(192px) rotate(2deg); }
+}
+.firefly {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #ffdb58;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #ffdb58;
+  pointer-events: none;
+  z-index: 3000;
+  animation: fireflyRise 6s ease-out forwards;
+}
+/* Slider container */
+#noteContent {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Navigation buttons */
+.left-btn, .right-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.left-btn:hover, .right-btn:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+.left-btn { left: 10px; }
+.right-btn { right: 10px; }
+
+/* Make note-box relative for positioning buttons */
+.note-box {
+  position: relative;
+}
+</style>
+</head>
+<body>
+<div id="noteUI">
+  <div class="note-box">
+    <div id="noteContent">
+      <p id="noteText"></p>
+      <img id="noteImage" alt="Memory Image" style="max-width: 100%; border-radius: 8px;">
+    </div>
+    <button class="left-btn" id="prevBtn">&lt;</button>
+    <button class="right-btn" id="nextBtn">&gt;</button>
+    <button class="close-note">Close</button>
+  </div>
+</div>
+<div id="textContainer" class="message-overlay"></div>
+<div id="glassJar" title="Memory Jar">
+  <div class="jar">
+    <img src="rhonxlhian.jpg" class="jar-preview-img" alt="">
+  </div>
+</div>
+<script>
+(function() {
+  const jar = document.getElementById('glassJar');
+  const noteUI = document.getElementById('noteUI');
+  const closeBtn = document.querySelector('.close-note');
+  const textContainer = document.getElementById('textContainer');
+  const memories = [
+    { note: "yep, nang dahil sa dare HAHA (sobrang swerte naman netong nasa kaliwa para maidare sa'yooo buti nalang umattend ako nito)", image: "rhonxlhian.jpg" },
+    { note:   "graduation day! (more like night tho haha) this was when I thought I'd never get a picture, but good thing I walked slowly that I never got far from you and was able to come back when u finally responded to my text.", image: "lhianxrhon.jpg" }, // Add your second image URL here
+    { note: "April 8, 2025  your friends took a candid photo, did you know this?", image: "candidlhian.jpg" },  // Add your third image URL here
+    { note: "Not proud of this one, may sugat ka pala and you needed some band aid, which I actually have inside my wallet, I just lacked awareness. Sigh, It's far too late when I realized, Opportunity lost again.", image: "lhianaid.jpg" },
+    { note: "It sure is windy..", image: "gazingrhonxlhian.jpg"},
+    {note: "ml yarn? grabe sha mag hanabi oh",image: "lhianxml.jpg"},
+    {note: "us as plmun students na otw sa university, medyo adventure pa haha minsan nalang nga kita makasama umulan pa talaga tapos trafficc, sorry for taking this picture withour u knowing pala",image: "lhianxrhonotw.jpg"},
+    {note: "bakit mo tinakpann",image: "lhianxrhonshades.jpg"},
+    {note: "yep, you probably sent this to me cuz u looked cute, hindi 'dahil nandun ako'",image: "lhiancutie.jpg"},
+    {note: "This were the times kung saan panay tanong ako kay jahnea kung saan ka ba mapupuntahan HAHA GOD, sobrang kulitt",image: "plawerforlhian.jpg"},
+    {note: "I wish we had more pictures togetherrr",image: "rukiaa.gif"},
+    {note: "I wish I had more picturess of youuuu ;(",image: "lhiann.jpg"},
+    {note: "plss sendddd kaa paa ng picturess moo para lagay ko dito heheh.."}
+    // Add more objects as needed
+  ];
+  let currentMemory = 0;
+
+  function updateMemory() {
+    document.getElementById('noteText').textContent = memories[currentMemory].note;
+    document.getElementById('noteImage').src = memories[currentMemory].image;
+  }
+  // Open Jar
+  jar.addEventListener('click', () => {
+    updateMemory(); // Load the first memory initially
+    noteUI.classList.add('active');
+  });
+  // Close Jar + Firefly + Big Text
+  closeBtn.addEventListener('click', () => {
+    noteUI.classList.remove('active');
+    // Create Firefly from Jar position
+    const r = jar.getBoundingClientRect();
+    const fly = document.createElement('div');
+    fly.className = 'firefly';
+    fly.style.left = (r.left + r.width / 2) + 'px';
+    fly.style.top = (r.top + r.height / 2) + 'px';
+    document.body.appendChild(fly);
+    setTimeout(() => fly.remove(), 6000);
+    // Trigger Big Text sequence
+    showBigText("Sobrang ganda mo talagaaa", 500);
+    showBigText("T.L ako sa'yo", 3000);
+  });
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    currentMemory = (currentMemory - 1 + memories.length) % memories.length;
+    updateMemory();
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    currentMemory = (currentMemory + 1) % memories.length;
+    updateMemory();
+  });
+  function showBigText(message, delay) {
+    setTimeout(() => {
+      const el = document.createElement('span');
+      el.className = 'big-text';
+      el.innerText = message;
+      el.style.animation = "textPopup 4s ease-in-out forwards";
+      textContainer.appendChild(el);
+     
+      // Remove from DOM to keep it clean
+      setTimeout(() => el.remove(), 4500);
+    }, delay);
+  }
+})();
+</script>
+<style>
+/* Position the button at the bottom right corner */
+  #ambientToggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+  }
+  #ambientToggle:hover {
+    background-color: rgba(0,0,0,0.4);
+  }
+  /* Phone Icon */
+  #phoneIcon {
+    position: fixed;
+    bottom: 20px;
+    left: 230px;
+    width: 50px;
+    height: 75px;
+    background: #333;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 60px;
+  }
+  /* Overlay for phone UI */
+  #phoneUI {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 300px;
+    height: 500px;
+    background: #222;
+    border-radius: 10px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    z-index: 20000;
+  }
+  /* Screen inside the phone */
+  #screen {
+    flex: 1;
+    background: #fff;
+    position: relative;
+  }
+  /* Navigation buttons */
+  #navButtons {
+    display: flex;
+    justify-content: space-around;
+    background: #444;
+    padding: 5px;
+  }
+  #navButtons button {
+    background: #666;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+  }
+  /* iframe for browsing pages */
+  #browser {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+</style>
+</head>
+<body>
+  <!-- Small toggle button with dynamic icon -->
+<button id="ambientToggle" title="Toggle Ambient Sound">🔊</button>
+<!-- Hidden audio element -->
+<audio id="ambientAudio" loop>
+  <!-- Replace with your ambient sound file path -->
+  <source src="so-this-is-love-sneha-4_zwKbcmtH.mp3" type="audio/mpeg" />
+  Your browser does not support the audio element.
+</audio>
+<!-- Phone Icon -->
+<div id="phoneIcon" title="Open Phone">📱</div>
+<!-- Phone UI Overlay -->
+<div id="phoneUI">
+  <div id="screen">
+    <!-- Content will be loaded here -->
+    <iframe id="browser" src=""></iframe>
+  </div>
+  <div id="navButtons">
+    <button data-page="page1">note</button>
+    <button data-page="page2">utube</button>
+    <button data-page="external">rhon's search history</button>
+  </div>
+</div>
+<script>
+  const audio = document.getElementById('ambientAudio');
+  const toggleBtn = document.getElementById('ambientToggle');
+  // Set initial icon to unmuted
+  toggleBtn.textContent = '🔊';
+  // Auto-play the sound when page loads
+  window.onload = () => {
+    audio.play().then(() => {
+      toggleBtn.textContent = '🔊'; // ensure icon shows unmuted
+    }).catch((error) => {
+      // Handle auto-play restrictions
+      console.log('Auto-play was prevented:', error);
+    });
+  };
+  toggleBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      toggleBtn.textContent = '🔊'; // unmuted icon
+    } else {
+      audio.pause();
+      toggleBtn.textContent = '🔇'; // muted icon
+    }
+  });
+</script>
+<script>
+ 
+const phoneIcon = document.getElementById('phoneIcon');
+const phoneUI = document.getElementById('phoneUI');
+const iframe = document.getElementById('browser');
+// Show or hide the phone UI when icon is clicked
+phoneIcon.addEventListener('click', () => {
+  phoneUI.style.display = phoneUI.style.display === 'flex' ? 'none' : 'flex';
+});
+// Define pages
+const pages = {
+  page1: 'https://ngl.link/rhon22193', // Replace with your own pages if you want
+  page2: 'https://www.youtube.com/embed/QsWFbMc5t84?autoplay=1&rel=0',
+  external: 'https://letmegooglethat.com/?q=bakit+sobrang+cute+ni+Lhian+Shane%3F.com'
+};
+// Load page into iframe
+function loadPage(pageKey) {
+  const url = pages[pageKey];
+  iframe.src = url;
+}
+// Add event listeners to buttons
+document.querySelectorAll('#navButtons button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const page = btn.getAttribute('data-page');
+    loadPage(page);
+  });
+});
+// Load default page
+loadPage('page1');
+</script>
+</body>
+</html>
+```
