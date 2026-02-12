@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Quick Login System for my lovey dovey</title>
+<link rel="shortcut icon" href="rhon.jpg" type="image/x-icon">
+<style>
+  /* 1. Background Animation and Setup */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0; /* Critical: removes white gaps */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevents scrollbars during animation */
+    
+    /* Background Image Settings */
+    background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("lana-del-rey-album-art.jpg");
+    background-size: 100% 100%; /* Stretches to fill everything */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    /* Drop-down Animation: Moves background from top to bottom */
+    animation: dropBackground 4s ease-out forwards;
+  }
+
+  @keyframes dropBackground {
+    0% { background-position: center -100px; }
+    100% { background-position: center 0; }
+  }
+
+  /* 2. Login Container Styling */
+  .login-container {
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    width: 350px;
+    text-align: center;
+    
+    /* Fade-in Animation for the box */
+    animation: fadeInBox 2s ease-in forwards;
+    opacity: 0; /* Starts invisible */
+  }
+
+  @keyframes fadeInBox {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box; /* Ensures padding doesn't break width */
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #357edd;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background-color: #2851a3;
+  }
+
+  .message {
+    margin-top: 15px;
+    font-weight: bold;
+    min-height: 20px;
+  }
+
+  .success { color: #28a745; }
+  .error { color: #dc3545; }
+
+  /* Ensure the hidden link is truly hidden */
+  #nextPageLink { display: none; }
+</style>
+</head>
+<body>
+
+  <!-- Background music -->
+  <audio id="bgMusic" loop>
+    <source src="yeah my boyfriend's pretty cool.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Login container -->
+  <div class="login-container">
+    <h2>Login</h2>
+    <label for="nameInput">
+      Input your name<br>
+      <small>(only my crush is allowed to proceed. Must enter first and 2nd name or lastname or FULL NAME to confirm.)</small>
+    </label>
+    <input type="text" id="nameInput" placeholder="Type your full name" autofocus />
+    <button id="loginButton" onclick="validateName()">Login</button>
+    <div class="message" id="message"></div>
+    
+    <a id="nextPageLink" href="flowers.html"></a>
+  </div>
+
+<script>
+  const validNames = [
+    "Lhian Shane Dionco",
+    "Lhian Shane",
+    "Dionco",
+    "Lhian Shane B Dionco",
+    "Lhian Shane B. Dionco"
+  ];
+
+  const audio = document.getElementById('bgMusic');
+
+  // Attempt to autoplay on page load
+  window.onload = () => {
+    audio.play().then(() => {
+      console.log('Audio played successfully on load.');
+    }).catch((error) => {
+      console.log('Autoplay prevented:', error);
+      // Could display a message here prompting user to click to start music
+    });
+  };
+
+  // Play audio on first user interaction
+  document.body.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().then(() => {
+        console.log('Audio started after user interaction.');
+      }).catch(e => {
+        console.log('Still cannot autoplay:', e);
+      });
+    }
+  });
+
+  function validateName() {
+    // Ensure audio plays when they click the button
+    if (audio.paused) {
+      audio.play().catch(e => console.log("Audio waiting for interaction"));
+    }
+
+    const input = document.getElementById('nameInput').value.trim();
+    const messageDiv = document.getElementById('message');
+
+    const isValid = validNames.some(name => name.toLowerCase() === input.toLowerCase());
+
+    if (isValid) {
+      messageDiv.textContent = "Welcome, " + input + "! ❤️";
+      messageDiv.className = "message success";
+
+      // Redirect after a short delay
+      setTimeout(() => {
+        window.location.href = "flowers.html";
+      }, 2000); 
+    } else {
+      messageDiv.textContent = "Invalid name. Please try again.";
+      messageDiv.className = "message error";
+    }
+  }
+
+  // Listen for Enter key
+  document.getElementById('nameInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      validateName();
+    }
+
+
+// Get references to the elements
+const songSelect = document.getElementById('songList');
+const audio = document.getElementById('bgAudio');
+const briefImage = document.getElementById('briefImage');
+
+function showBriefImage() {
+  if (songSelect.value === "Lover, You Should've Come Over.mp3" && !audio.paused) {
+    briefImage.style.display = 'block';
+    setTimeout(() => {
+      briefImage.style.display = 'none';
+    }, 3000); // Show for 3 seconds
+  }
+}
+
+// When user changes song
+songSelect.addEventListener('change', () => {
+  const wasPlaying = !audio.paused;
+  audio.src = songSelect.value;
+  audio.load();
+  if (wasPlaying) {
+    audio.play();
+  }
+  showBriefImage();
+});
+
+// When the song starts playing
+audio.addEventListener('play', showBriefImage);
+
+  });
+
+
+  
+</script>
+
+</body>
+</html>
